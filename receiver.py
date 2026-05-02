@@ -37,6 +37,11 @@ class EnvReceiverHandler(BaseHTTPRequestHandler):
             self._write_json(400, {"error": "env_vars must be an object"})
             return
 
+        # Print full payload for easy debugging in the receiver terminal.
+        print("\n=== Received payload ===", flush=True)
+        print(json.dumps(payload, ensure_ascii=False, indent=2), flush=True)
+        print("========================\n", flush=True)
+
         response = {
             "status": "ok",
             "received_at": datetime.now(timezone.utc).isoformat(),
@@ -52,7 +57,7 @@ class EnvReceiverHandler(BaseHTTPRequestHandler):
 
     def log_message(self, format: str, *args) -> None:
         # Keep output minimal and readable.
-        print(f"[{self.log_date_time_string()}] {format % args}")
+        print(f"[{self.log_date_time_string()}] {format % args}", flush=True)
 
 
 def parse_args() -> argparse.Namespace:
@@ -65,11 +70,11 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     server = HTTPServer((args.host, args.port), EnvReceiverHandler)
-    print(f"Receiver listening on http://{args.host}:{args.port}/env")
+    print(f"Receiver listening on http://{args.host}:{args.port}/env", flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        print("\nReceiver stopped.")
+        print("\nReceiver stopped.", flush=True)
     finally:
         server.server_close()
 
