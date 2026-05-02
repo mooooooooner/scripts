@@ -1,6 +1,4 @@
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$Endpoint,
     [double]$Timeout = 10
 )
 
@@ -24,7 +22,7 @@ try {
         throw "python not found in PATH."
     }
 
-    & $pythonCmd.Source $senderPath --endpoint $Endpoint --timeout $Timeout
+    & $pythonCmd.Source $senderPath --timeout $Timeout
     exit $LASTEXITCODE
 }
 finally {
