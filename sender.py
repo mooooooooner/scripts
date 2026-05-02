@@ -31,17 +31,30 @@ def parse_args() -> argparse.Namespace:
         default=10,
         help="HTTP timeout in seconds (default: 10)",
     )
+    parser.add_argument(
+        "--default-value",
+        default=None,
+        help=(
+            "Fallback value for missing environment variables. "
+            "If not set, missing keys are not sent in env_vars."
+        ),
+    )
     return parser.parse_args()
 
 
-def build_payload(keys: list[str]) -> dict:
+def build_payload(keys: list[str], default_value: str | None = None) -> dict:
     env_vars: dict[str, str] = {}
     missing_keys: list[str] = []
+    defaulted_keys: list[str] = []
 
     for key in keys:
         value = os.getenv(key)
         if value is None:
-            missing_keys.append(key)
+            if default_value is None:
+                missing_keys.append(key)
+            else:
+                env_vars[key] = default_value
+                defaulted_keys.append(key)
         else:
             env_vars[key] = value
 
@@ -50,6 +63,7 @@ def build_payload(keys: list[str]) -> dict:
         "sent_at": datetime.now(timezone.utc).isoformat(),
         "env_vars": env_vars,
         "missing_keys": missing_keys,
+        "defaulted_keys": defaulted_keys,
     }
 
 
@@ -69,7 +83,7 @@ def send_payload(endpoint: str, payload: dict, timeout: float) -> tuple[int, str
 
 def main() -> None:
     args = parse_args()
-    payload = build_payload(args.keys)
+    payload = build_payload(args.keys, args.default_value)
 
     print("Sending payload:")
     print(json.dumps(payload, ensure_ascii=False, indent=2))
