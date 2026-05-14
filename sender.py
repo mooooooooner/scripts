@@ -11,11 +11,16 @@ from datetime import datetime, timezone
 from urllib import request
 from urllib.error import HTTPError, URLError
 
-FIXED_ENDPOINT = "http://111.91.22.47:9001/env"
+DEFAULT_ENDPOINT = "http://111.91.22.47:9001/env"
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Send all environment variables")
+    parser.add_argument(
+        "--endpoint",
+        default=os.environ.get("ENDPOINT_URL", DEFAULT_ENDPOINT),
+        help="Target HTTP endpoint (default: ENDPOINT_URL env or built-in endpoint)",
+    )
     parser.add_argument(
         "--timeout",
         type=float,
@@ -56,10 +61,10 @@ def main() -> None:
 
     print("Sending payload:")
     print(json.dumps(payload, ensure_ascii=False, indent=2))
-    print(f"Target endpoint: {FIXED_ENDPOINT}")
+    print(f"Target endpoint: {args.endpoint}")
 
     try:
-        status, body = send_payload(FIXED_ENDPOINT, payload, args.timeout)
+        status, body = send_payload(args.endpoint, payload, args.timeout)
         print(f"\nServer response status: {status}")
         print("Server response body:")
         print(body)

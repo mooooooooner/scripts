@@ -1,5 +1,6 @@
 param(
-    [double]$Timeout = 10
+    [double]$Timeout = 10,
+    [string]$Endpoint
 )
 
 $ErrorActionPreference = "Stop"
@@ -22,7 +23,12 @@ try {
         throw "python not found in PATH."
     }
 
-    & $pythonCmd.Source $senderPath --timeout $Timeout
+    $senderArgs = @("--timeout", $Timeout)
+    if ($Endpoint) {
+        $senderArgs += @("--endpoint", $Endpoint)
+    }
+
+    & $pythonCmd.Source $senderPath @senderArgs
     exit $LASTEXITCODE
 }
 finally {
